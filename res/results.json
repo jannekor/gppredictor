@@ -1,0 +1,19 @@
+{
+  "topten": {
+    "first": "Verstappen",
+    "second": "Hamilton",
+    "third": "Ricciardo",
+    "fourth": "Vettel",
+    "fifth": "Bottas",
+    "sixth": "Perez",
+    "seventh": "Vandoorne",
+    "eight": "Stroll",
+    "ninth": "Massa",
+    "tenth": "Ocon",
+    "eleventh": "Alonso",
+    "twelfth": "Magnussen"
+  },
+  "pole": "Hamilton",
+  "fastest": "Vettel",
+  "gained": "Vettel"
+}

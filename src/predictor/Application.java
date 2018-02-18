@@ -1,14 +1,16 @@
-package predictor;
+//package predictor;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-// import org.json;
+//import org.json;
 
 public class Application {
 
-    public static void main(String[] args) {
+    static Scanner reader = new Scanner(System.in);
 
-        ArrayList drivers = new ArrayList();
+    public static ArrayList<String> fetchDrivers() {
+        // TODO: change the implementation of this method to read the drivers from JSON file
+        ArrayList<String> drivers = new ArrayList<String>();
         drivers.add("Hamilton");
         drivers.add("Bottas");
         drivers.add("Vettel");
@@ -30,23 +32,13 @@ public class Application {
         drivers.add("Ericsson");
         drivers.add("Wehrlein");
 
-        Scanner reader = new Scanner(System.in);
+        return drivers;
+    }
 
-        ArrayList predictTopTen = new ArrayList();
-        ArrayList resultsTopTen = new ArrayList();
 
-        String predictedPole;
-        String resultPole;
-        String predictedFastest;
-        String resultFastest;
-        String predictedGained;
-        String resultGained;
+    public static ArrayList<String> giveTopTenPredictions(ArrayList drivers) {
 
-        int points = 0;
-        int eventCount = 0;
-        int raceCount = 0;
-        int topThree = 0;
-
+        ArrayList<String> predictions = new ArrayList<String>();
         for (int i = 1; i <= 10; i++) {
             System.out.println("Predict driver " + i + ": ");
             String input = reader.next();
@@ -54,8 +46,18 @@ public class Application {
                 System.out.println("Driver doesn't exist, add a driver: ");
                 input = reader.next();
             }
-            predictTopTen.add(input);
+            predictions.add(input);
         }
+        return predictions;
+    }
+
+
+    public static ArrayList<String> giveEventPredictions(ArrayList drivers) {
+
+        ArrayList<String> events = new ArrayList<String>();
+        String predictedPole;
+        String predictedFastest;
+        String predictedGained;
 
         System.out.println("Enter pole position: ");
         predictedPole = reader.next();
@@ -63,21 +65,31 @@ public class Application {
             System.out.println("Driver doesn't exist, add a driver: ");
             predictedPole = reader.next();
         }
+        events.add(predictedPole);
+
         System.out.println("Enter fastest lap: ");
         predictedFastest = reader.next();
         while (!drivers.contains(predictedFastest)) {
             System.out.println("Driver doesn't exist, add a driver: ");
             predictedFastest = reader.next();
         }
+        events.add(predictedFastest);
+
         System.out.println("Enter positions gained: ");
         predictedGained = reader.next();
         while (!drivers.contains(predictedGained)) {
             System.out.println("Driver doesn't exist, add a driver: ");
             predictedGained = reader.next();
         }
+        events.add(predictedGained);
 
-        /*
-        for (int i = 1; i <= 12; i++) {
+        return events;
+    }
+
+
+    public static ArrayList<String> fetchTopTwelveResults(ArrayList drivers) {
+
+        /*for (int i = 1; i <= 12; i++) {
             System.out.println("Enter result driver " + i + ": ");
             String input2 = reader.next();
             while (!drivers.contains(input2)) {
@@ -85,8 +97,29 @@ public class Application {
                 input2 = reader.next();
             }
             resultsTopTen.add(input2);
-        }
+        }*/
+        //TODO: change implementation to read these from JSON file
+        ArrayList<String> resultsTopTwelve = new ArrayList<String>();
 
+        resultsTopTwelve.add("Verstappen");
+        resultsTopTwelve.add("Hamilton");
+        resultsTopTwelve.add("Ricciardo");
+        resultsTopTwelve.add("Vettel");
+        resultsTopTwelve.add("Bottas");
+        resultsTopTwelve.add("Perez");
+        resultsTopTwelve.add("Vandoorne");
+        resultsTopTwelve.add("Stroll");
+        resultsTopTwelve.add("Massa");
+        resultsTopTwelve.add("Ocon");
+        resultsTopTwelve.add("Alonso");
+        resultsTopTwelve.add("Magnussen");
+
+        return resultsTopTwelve;
+    }
+
+
+    public static ArrayList<String> fetchEventResults(ArrayList drivers) {
+        /*
         System.out.println("Enter pole position result: ");
         resultPole = reader.next();
         while (!drivers.contains(resultPole)) {
@@ -106,170 +139,155 @@ public class Application {
             resultGained = reader.next();
         }
         */
-        resultsTopTen.add("Verstappen");
-        resultsTopTen.add("Hamilton");
-        resultsTopTen.add("Ricciardo");
-        resultsTopTen.add("Vettel");
-        resultsTopTen.add("Bottas");
-        resultsTopTen.add("Perez");
-        resultsTopTen.add("Vandoorne");
-        resultsTopTen.add("Stroll");
-        resultsTopTen.add("Massa");
-        resultsTopTen.add("Ocon");
-        resultsTopTen.add("Alonso");
-        resultsTopTen.add("Magnussen");
-        resultFastest = "Vettel";
-        resultGained = "Vettel";
-        resultPole = "Hamilton";
+        //TODO: change implementation to read these from JSON file as well
+        String resultPole = "Hamilton";
+        String resultFastest = "Vettel";
+        String resultGained = "Vettel";
+        ArrayList<String> resultsEvents = new ArrayList<String>();
 
-        if (predictedFastest.equals(resultFastest)) {
-            points = points + 5;
-            eventCount++;
-            System.out.println("Points after fastest: " + points);
-        }
-        if (predictedGained.equals(resultGained)) {
-            points = points + 5;
-            eventCount++;
-            System.out.println("Points after gained: " + points);
-        }
-        if (predictedPole.equals(resultPole)) {
-            points = points + 5;
-            eventCount++;
-            System.out.println("Points after pole: " + points);
+        resultsEvents.add(resultPole);
+        resultsEvents.add(resultFastest);
+        resultsEvents.add(resultGained);
+
+        return resultsEvents;
+    }
+
+
+    public static int calculateEventPoints(ArrayList predictions, ArrayList results, int points) {
+
+        int eventCount = 0;
+
+        for (int i = 0; i < predictions.size(); i++) {
+            if (predictions.get(i).equals(results.get(i))) {
+                points = points + 5;
+                eventCount++;
+            }
         }
         if (eventCount == 3) {
             points = points + 20;
-            System.out.println("Points after event bonus: " + points);
         }
 
+        return points;
+    }
+
+
+    public static int calculateRacePoints(ArrayList predictedTopTen, ArrayList resultsTopTen, int points) {
+
+        int raceCount = 0;
+        int topThree = 0;
         String current;
 
-        for (int i = 0; i < predictTopTen.size(); i++) {
-            current = predictTopTen.get(i).toString();
+        for (int i = 0; i < predictedTopTen.size(); i++) {
+            current = predictedTopTen.get(i).toString();
 
             if (i == 0) {
-                // compary only current and plus12
+                // compary only current and plus1-2
                 if (current.equals(resultsTopTen.get(i))) {
                     points = points + 20;
                     raceCount++;
                     topThree++;
-                    System.out.println("Points after winner: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 1))) {
                     points = points + 5;
-                    System.out.println("Points after 0+1: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 2))) {
                     points = points + 2;
-                    System.out.println("Points after 0+2: " + points);
                 }
             } else if (i == 1) {
-                // compare only current, minus1 and plus12
+                // compare only current, minus1 and plus1-2
                 if (current.equals(resultsTopTen.get(i))) {
                     points = points + 10;
                     raceCount++;
                     topThree++;
-                    System.out.println("Points after secondplace: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 1))) {
                     points = points + 5;
-                    System.out.println("Points after 1-1: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 1))) {
                     points = points + 5;
-                    System.out.println("Points after 1+1: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 2))) {
                     points = points + 2;
-                    System.out.println("Points after 1+2: " + points);
                 }
             } else if (i == 2) {
                 if (current.equals(resultsTopTen.get(i))) {
                     points = points + 10;
                     raceCount++;
                     topThree++;
-                    System.out.println("Points after " + i + "thplace: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 1))) {
                     points = points + 5;
-                    System.out.println("Points after " + i + "-1: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 2))) {
                     points = points + 2;
-                    System.out.println("Points after " + i + "-2: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 1))) {
                     points = points + 5;
-                    System.out.println("Points after " + i + "+1: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 2))) {
                     points = points + 2;
-                    System.out.println("Points after " + i + "+2: " + points);
                 }
             } else if (i == 8) {
-                // compare only current, plus1 and minus12
+                // compare only current, plus1 and minus1-2
                 if (current.equals(resultsTopTen.get(i))) {
                     points = points + 10;
                     raceCount++;
-                    System.out.println("Points after ninthplace: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 1))) {
                     points = points + 5;
-                    System.out.println("Points after 8+1: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 1))) {
                     points = points + 5;
-                    System.out.println("Points after 8-1: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 2))) {
                     points = points + 2;
-                    System.out.println("Points after 8-2: " + points);
                 }
             } else if (i == 9) {
-                // compare only current and minus12
+                // compare only current and minus1-2
                 if (current.equals(resultsTopTen.get(i))) {
                     points = points + 10;
                     raceCount++;
-                    System.out.println("Points after tenthplace: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 1))) {
                     points = points + 5;
-                    System.out.println("Points after 10-1: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 2))) {
                     points = points + 2;
-                    System.out.println("Points after 10-2: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 1))) {
                     points = points + 5;
-                    System.out.println("Points after 10+1: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 2))) {
                     points = points + 2;
-                    System.out.println("Points after 10+2: " + points);
                 }
             } else {
                 if (current.equals(resultsTopTen.get(i))) {
                     points = points + 10;
                     raceCount++;
-                    System.out.println("Points after " + i + "thplace: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 1))) {
                     points = points + 5;
-                    System.out.println("Points after " + i + "-1: " + points);
                 } else if (current.equals(resultsTopTen.get(i - 2))) {
                     points = points + 2;
-                    System.out.println("Points after " + i + "-2: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 1))) {
                     points = points + 5;
-                    System.out.println("Points after " + i + "+1: " + points);
                 } else if (current.equals(resultsTopTen.get(i + 2))) {
                     points = points + 2;
-                    System.out.println("Points after " + i + "+2: " + points);
                 }
             }
         }
 
         if (raceCount == 10) {
             points = points + 100;
-            System.out.println("Points after raceCount 10: " + points);
         } else if (raceCount >= 6) {
             points = points + 60;
-            System.out.println("Points after raceCount >=6: " + points);
         }
 
         if (topThree == 3) {
             points = points + 30;
-            System.out.println("Points after topThree: " + points);
         }
 
+        return points;
+    }
+
+
+    public static void main(String[] args) {
+
+        int points = 0;
+
+        ArrayList<String> drivers = fetchDrivers();
+        ArrayList<String> predictedTopTen = giveTopTenPredictions(drivers);
+        ArrayList<String> predictedEvents = giveEventPredictions(drivers);
+        ArrayList<String> resultsTopTen = fetchTopTwelveResults(drivers);
+        ArrayList<String> resultsEvents = fetchEventResults(drivers);
+
+        points = calculateEventPoints(predictedEvents, resultsEvents, points);
+        points = calculateRacePoints(predictedTopTen, resultsTopTen, points);
+
         System.out.println("Total number of points: " + points);
-        System.out.println("Eventcount: " + eventCount);
-        System.out.println("Racecount: " + raceCount);
-        System.out.println("Top three: " + topThree);
     }
 }
 

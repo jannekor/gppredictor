@@ -1,15 +1,16 @@
-//package predictor;
+package predictor;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-//import org.json;
 
 public class Application {
 
     static Scanner reader = new Scanner(System.in);
 
     public static ArrayList<String> fetchDrivers() {
+        // This method generates and returns the list of all drivers competing in the Formula One season
         // TODO: change the implementation of this method to read the drivers from JSON file
+
         ArrayList<String> drivers = new ArrayList<String>();
         drivers.add("Hamilton");
         drivers.add("Bottas");
@@ -36,7 +37,8 @@ public class Application {
     }
 
 
-    public static ArrayList<String> giveTopTenPredictions(ArrayList drivers) {
+    public static ArrayList<String> giveTopTenPredictions(ArrayList<String> drivers) {
+        // In this method the top ten race results are prompted from the user
 
         ArrayList<String> predictions = new ArrayList<String>();
         for (int i = 1; i <= 10; i++) {
@@ -52,7 +54,8 @@ public class Application {
     }
 
 
-    public static ArrayList<String> giveEventPredictions(ArrayList drivers) {
+    public static ArrayList<String> giveEventPredictions(ArrayList<String> drivers) {
+        // In this method the event predictions are prompted from the user
 
         ArrayList<String> events = new ArrayList<String>();
         String predictedPole;
@@ -87,20 +90,21 @@ public class Application {
     }
 
 
-    public static ArrayList<String> fetchTopTwelveResults(ArrayList drivers) {
+    public static ArrayList<String> giveTopTwelveResults(ArrayList<String> drivers) {
+        // In this method the top ten race results are prompted from the user
 
-        /*for (int i = 1; i <= 12; i++) {
-            System.out.println("Enter result driver " + i + ": ");
-            String input2 = reader.next();
-            while (!drivers.contains(input2)) {
-                System.out.println("Driver doesn't exist, add a driver: ");
-                input2 = reader.next();
-            }
-            resultsTopTen.add(input2);
-        }*/
-        //TODO: change implementation to read these from JSON file
         ArrayList<String> resultsTopTwelve = new ArrayList<String>();
 
+        for (int i = 1; i <= 12; i++) {
+            System.out.println("Enter result driver " + i + ": ");
+            String input = reader.next();
+            while (!drivers.contains(input)) {
+                System.out.println("Driver doesn't exist, add a driver: ");
+                input = reader.next();
+            }
+            resultsTopTwelve.add(input);
+        }
+        /*TODO: change implementation to read these from JSON file
         resultsTopTwelve.add("Verstappen");
         resultsTopTwelve.add("Hamilton");
         resultsTopTwelve.add("Ricciardo");
@@ -113,33 +117,44 @@ public class Application {
         resultsTopTwelve.add("Ocon");
         resultsTopTwelve.add("Alonso");
         resultsTopTwelve.add("Magnussen");
-
+        */
         return resultsTopTwelve;
     }
 
 
-    public static ArrayList<String> fetchEventResults(ArrayList drivers) {
-        /*
+    public static ArrayList<String> giveEventResults(ArrayList<String> drivers) {
+        // In this method the event results are prompted from the user
+
+        String resultPole;
+        String resultFastest;
+        String resultGained;
+        ArrayList<String> resultsEvents = new ArrayList<String>();
+
         System.out.println("Enter pole position result: ");
         resultPole = reader.next();
         while (!drivers.contains(resultPole)) {
             System.out.println("Driver doesn't exist, add a driver: ");
             resultPole = reader.next();
         }
+        resultsEvents.add(resultPole);
+
         System.out.println("Enter fastest lap result: ");
         resultFastest = reader.next();
         while (!drivers.contains(resultFastest)) {
             System.out.println("Driver doesn't exist, add a driver: ");
             resultFastest = reader.next();
         }
+        resultsEvents.add(resultFastest);
+
         System.out.println("Enter positions gained result: ");
         resultGained = reader.next();
         while (!drivers.contains(resultGained)) {
             System.out.println("Driver doesn't exist, add a driver: ");
             resultGained = reader.next();
         }
-        */
-        //TODO: change implementation to read these from JSON file as well
+        resultsEvents.add(resultGained);
+
+        /*TODO: change implementation to read these from JSON file as well
         String resultPole = "Hamilton";
         String resultFastest = "Vettel";
         String resultGained = "Vettel";
@@ -148,12 +163,13 @@ public class Application {
         resultsEvents.add(resultPole);
         resultsEvents.add(resultFastest);
         resultsEvents.add(resultGained);
-
+        */
         return resultsEvents;
     }
 
 
-    public static int calculateEventPoints(ArrayList predictions, ArrayList results, int points) {
+    public static int calculateEventPoints(ArrayList<String> predictions, ArrayList<String> results, int points) {
+        // This method calculates points from the race events, including bonus points
 
         int eventCount = 0;
 
@@ -171,7 +187,8 @@ public class Application {
     }
 
 
-    public static int calculateRacePoints(ArrayList predictedTopTen, ArrayList resultsTopTen, int points) {
+    public static int calculateRacePoints(ArrayList<String> predictedTopTen, ArrayList<String> resultsTopTen, int points) {
+        // This method calculates points from the top ten positions, including bonus points
 
         int raceCount = 0;
         int topThree = 0;
@@ -181,7 +198,7 @@ public class Application {
             current = predictedTopTen.get(i).toString();
 
             if (i == 0) {
-                // compary only current and plus1-2
+                // compare only current and plus1-2
                 if (current.equals(resultsTopTen.get(i))) {
                     points = points + 20;
                     raceCount++;
@@ -281,8 +298,8 @@ public class Application {
         ArrayList<String> drivers = fetchDrivers();
         ArrayList<String> predictedTopTen = giveTopTenPredictions(drivers);
         ArrayList<String> predictedEvents = giveEventPredictions(drivers);
-        ArrayList<String> resultsTopTen = fetchTopTwelveResults(drivers);
-        ArrayList<String> resultsEvents = fetchEventResults(drivers);
+        ArrayList<String> resultsTopTen = giveTopTwelveResults(drivers);
+        ArrayList<String> resultsEvents = giveEventResults(drivers);
 
         points = calculateEventPoints(predictedEvents, resultsEvents, points);
         points = calculateRacePoints(predictedTopTen, resultsTopTen, points);
